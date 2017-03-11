@@ -1,0 +1,2 @@
+# estop
+Elasticsearch Hot Indexes
