@@ -40,13 +40,15 @@ function compare($a,$b){
 
 
 function prepare_data(){
-	global $json1, $json2, $rating;
+	global $json1, $json2, $rating, $measure_time;
 	global $_SLEEPTIME;
 
 	$json1 = (empty($json1)) ? get_indicies() : $json2;  
 	echo "Update interval is {$_SLEEPTIME}s\n";
+	$measure_time = microtime(true);
 	sleep($_SLEEPTIME);
 	$json2 = get_indicies();
+	$measure_time = microtime(true) - $measure_time;
 
 	echo "Preparing data";
 	$rating = array();
@@ -61,7 +63,7 @@ function prepare_data(){
 
 
 function print_screen($extra_text=""){
-	global $_TOPNUM, $_SLEEPTIME, $rating;
+	global $_TOPNUM, $_SLEEPTIME, $rating,$measure_time;
 
 	system('clear');
 	echo "{$extra_text}\n";
@@ -72,7 +74,7 @@ function print_screen($extra_text=""){
 	$i=0;
 	foreach ( $rating as $i => $r ){ 
 		if($i++ > $_TOPNUM) break;
-		print_to_table( $r[0], $r[1], $r[2], ($r[3]/$_SLEEPTIME+2).' rec/s' );
+		print_to_table( $r[0], $r[1], $r[2], ( round( $r[3]/$measure_time, 2 )  ).' rec/s' );
 	}
 	print_table_line();
 }
